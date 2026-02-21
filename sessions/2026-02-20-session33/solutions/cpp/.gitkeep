@@ -1,0 +1,93 @@
+# Median in a Row-wise Sorted Matrix (C++)
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+ int median(vector<vector<int>> &mat) {
+        
+        int R = mat.size();
+        int C = mat[0].size();
+        
+        int mini = INT_MAX;
+        int maxi = INT_MIN;
+
+        for (int i = 0; i < R; i++) {
+            mini = min(mini, mat[i][0]);
+            maxi = max(maxi, mat[i][C - 1]);
+        }
+
+        int OP = (R * C + 1) / 2;
+        int ans = -1;
+
+        
+        while (mini <= maxi) {
+            int mid = mini + (maxi - mini) / 2;
+
+            int freq = 0;
+
+           
+            for (int i = 0; i < R; i++) {
+                freq += upper_bound(mat[i].begin(), mat[i].end(), mid)
+                        - mat[i].begin();
+            }
+
+            if (freq >= OP) {
+                ans = mid;
+                maxi = mid - 1;
+            } else {
+                mini = mid + 1;
+            }
+        }
+
+        return ans;
+    }
+
+
+
+void solve(){
+    int r,c;
+    cin>>r>>c;
+
+    vector<vector<int>>matrix(r,vector<int>(c));
+
+    for(int i=0; i<r; i++){
+        for(int j=0; j<c; j++){
+            cin>>matrix[i][j];
+        }
+    }
+
+    cout<<"Median Is = "<< median(matrix)<<endl;
+}
+
+
+
+int main(){
+    // #ifndef PRIYANSH_KUMAR
+    //     freopen("input.txt", "r", stdin);
+    //     freopen("output.txt", "w", stdout);
+    // #endif
+
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);cout.tie(NULL);
+
+    int tc=1;
+    while(tc--){
+        solve();
+    }
+    return 0;
+}
+
+
+
+
+
+## Input: 
+
+```
+mat[][] = [[1, 3, 5], 
+           [2, 6, 9], 
+           [3, 6, 9]]
+```
+##  Output: 5
+##  Explanation: Sorting matrix elements gives us [1, 2, 3, 3, 5, 6, 6, 9, 9]. Hence, 5 is median.
